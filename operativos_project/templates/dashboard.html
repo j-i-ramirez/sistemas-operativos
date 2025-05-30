@@ -11,6 +11,7 @@
         button { padding: 8px 15px; background: #4CAF50; color: white; border: none; cursor: pointer; }
         button:hover { background: #45a049; }
         .item { padding: 10px; border-bottom: 1px solid #eee; }
+        .edit-form { display: none; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -38,6 +39,16 @@
             
             <h2>Items List</h2>
             <div id="items-list"></div>
+            
+            <!-- Formulario de edición -->
+            <div id="edit-form" class="edit-form">
+                <h2>Edit Item</h2>
+                <input id="edit-item-id" type="hidden">
+                <input id="edit-item-name" placeholder="Name">
+                <textarea id="edit-item-desc" placeholder="Description"></textarea>
+                <button onclick="saveEdit()">Save</button>
+                <button onclick="cancelEdit()">Cancel</button>
+            </div>
         </div>
     </div>
     
@@ -81,6 +92,7 @@
                     div.innerHTML = `
                         <h3>${item.nombre}</h3>
                         <p>${item.descripcion}</p>
+                        <button onclick="editItem(${item.id}, '${item.nombre}', '${item.descripcion}')">Edit</button>
                         <button onclick="deleteItem(${item.id})">Delete</button>
                         <hr>
                     `;
@@ -116,6 +128,36 @@
                     alert('Error deleting item: ' + error.message);
                 });
             }
+        }
+        
+        // Funciones de edición
+        function editItem(id, name, desc) {
+            document.getElementById('edit-item-id').value = id;
+            document.getElementById('edit-item-name').value = name;
+            document.getElementById('edit-item-desc').value = desc;
+            document.getElementById('edit-form').style.display = 'block';
+        }
+        
+        function saveEdit() {
+            const id = document.getElementById('edit-item-id').value;
+            axios.put(`/api/items/${id}/`, {
+                nombre: document.getElementById('edit-item-name').value,
+                descripcion: document.getElementById('edit-item-desc').value
+            }, {
+                headers: {'X-CSRFToken': getCookie('csrftoken')}
+            }).then(response => {
+                loadItems();
+                cancelEdit();
+            }).catch(error => {
+                alert('Error updating item: ' + error.message);
+            });
+        }
+        
+        function cancelEdit() {
+            document.getElementById('edit-form').style.display = 'none';
+            document.getElementById('edit-item-id').value = '';
+            document.getElementById('edit-item-name').value = '';
+            document.getElementById('edit-item-desc').value = '';
         }
         
         // Helper function para obtener cookies

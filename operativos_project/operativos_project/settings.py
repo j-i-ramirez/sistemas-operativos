@@ -11,9 +11,9 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
-SECRET_KEY = 'django-insecure-0==m0@*f-)_6rh$+pd$8y(2q)eu!&$+@1^_vu0vav9=^i6n$y*'
+SECRET_KEY = 'tu_clave_secreta_aqui'  # Cambia esto por una clave segura y única
 DEBUG = True
-ALLOWED_HOSTS = ['*']  # Permite todos los hosts para desarrollo
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
@@ -45,7 +45,7 @@ ROOT_URLCONF = 'operativos_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Agregamos la carpeta templates
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -67,7 +67,7 @@ DATABASES = {
         'NAME': 'users_db',
         'USER': 'admin',
         'PASSWORD': 'secret',
-        'HOST': 'db_users',  # Nombre del servicio en docker-compose
+        'HOST': 'db_users',
         'PORT': '5432',
     },
     'crud_db': {  # Para datos CRUD
@@ -75,7 +75,7 @@ DATABASES = {
         'NAME': 'crud_db',
         'USER': 'admin',
         'PASSWORD': 'secret',
-        'HOST': 'db_crud',  # Nombre del servicio en docker-compose
+        'HOST': 'db_crud',
         'PORT': '5432',
     }
 }
@@ -95,8 +95,9 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Para producción
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
